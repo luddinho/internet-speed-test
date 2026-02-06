@@ -468,6 +468,7 @@ if [ "$dry_run" -eq 1 ]; then
     echo "[DRY-RUN] Would send to InfluxDB:"
     echo "[DRY-RUN] URL: $influx_server:$influx_port/api/v2/write?bucket=$influx_bucket&org=$influx_org"
     echo "[DRY-RUN] Data: speed_test,isp=$isp,target_domain=$domain,location=$location,test_type=download speed=$speed,speed_mbps=$speed_mbps,http_code=$http_code,retcode=$curl_retcode,client_ip=\"$ipv4\",server_ip=\"$server_ip\",traceroute_target_ip=\"$traceroute_target_ip\",server_city=\"$server_city\",server_country=\"$server_country\",hop_count=$hop_count,first_hop=\"$first_hop\",last_hop=\"$last_hop\" $epoch_time_ms"
+    echo "[DRY-RUN] Headers: Authorization: Token ***[REDACTED]***, Content-Type: text/plain"
     influx_retcode=0
 else
     curl -X POST \
