@@ -1,0 +1,94 @@
+# Internet Speed Test zu InfluxDB
+
+🇩🇪 Deutsch | 🇬🇧 [English](README.md)
+
+Ein Bash-Skript, das die Download-Geschwindigkeit mit `curl` misst, die Messung mit Netzwerk-Metadaten (IP, Geo-Check, Traceroute-Hops) anreichert und die Daten per Line Protocol in InfluxDB 2.x schreibt.
+
+## Funktionen
+
+- Download-Speedtest via `curl` mit Timeout-Kontrolle.
+- Optionaler Max-Runtime-Watchdog gegen haengende Jobs.
+- ISP-Erkennung (Best Effort) via Traceroute und IP-Info.
+- Geo-Check fuer die Download-Server-IP.
+- Traceroute-Hop-Anzahl und First/Last Hop.
+- Schreiben der Messwerte in InfluxDB 2.x (oder Dry-Run Ausgabe).
+
+## Voraussetzungen
+
+- Bash
+- `curl`
+- `traceroute` (optional, aber empfohlen)
+- InfluxDB 2.x Server, Bucket, Org und Token mit Write-Rechten
+
+## Schnellstart
+
+```bash
+chmod +x internet-speed-test.sh
+
+./internet-speed-test.sh \
+  -u https://nbg1-speed.hetzner.com/100MB.bin \
+  -s http://192.0.2.10 \
+  -p 8086 \
+  -b mybucket \
+  -o myorg \
+  -a mytoken
+```
+
+## Optionen
+
+```
+-t, --timeout SECONDS         curl timeout in seconds (default: 30)
+-m, --max-runtime SECONDS     max script runtime (0 = no limit)
+-u, --url URL                 download URL for speed test (required)
+-i, --isp PROVIDER            ISP provider name (auto if not set)
+-d, --debug                   enable debug output
+-n, --dry-run                 do not send data to InfluxDB
+
+-s, --server URL              InfluxDB server URL (required)
+-p, --port PORT               InfluxDB server port (required)
+-b, --bucket NAME             InfluxDB bucket name (required)
+-o, --org NAME                InfluxDB organization (required)
+-a, --auth-token TOKEN        InfluxDB token (required*)
+-f, --auth-token-file FILE    file containing InfluxDB token (required*)
+                            *Either -a or -f must be provided
+
+-h, --help                    show help
+```
+
+## Was in InfluxDB geschrieben wird
+
+Measurement: `speed_test`
+
+Tags:
+- `isp`
+- `target_domain`
+- `location`
+- `test_type` (immer `download`)
+
+Fields:
+- `speed` (bytes/sec)
+- `speed_mbps`
+- `http_code`
+- `retcode` (curl exit code)
+- `client_ip`
+- `server_ip`
+- `traceroute_target_ip`
+- `server_city`
+- `server_country`
+- `hop_count`
+- `first_hop`
+- `last_hop`
+
+Timestamp: aktuelle Epoch-Zeit in Nanosekunden via `date +%s%N`.
+
+## Hinweise
+
+- Die Download-URL sollte auf eine ausreichend grosse Datei zeigen (z.B. 100MB) fuer stabile Werte.
+- ISP-Erkennung und Geo-Check sind Best Effort und koennen `unknown` oder `n.a.` liefern.
+- Wenn `traceroute` fehlt, sind Hop-Felder Default-Werte und ISP ist `unknown`, falls nicht gesetzt.
+
+## Troubleshooting
+
+- Bei fehlenden Parametern alle erforderlichen InfluxDB-Optionen angeben.
+- Bei Verbindungsproblemen Server-URL/Port und Token-Rechte pruefen.
+- Mit `--debug` Details anzeigen und mit `--dry-run` Payload pruefen ohne zu schreiben.
