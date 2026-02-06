@@ -1,0 +1,6 @@
+# Ignore all files in this directory
+*
+
+# But track these files
+!.gitignore
+!debug-influxdb.example.sh
