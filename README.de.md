@@ -85,7 +85,7 @@ debug=0
 dry_run=0
 ```
 
-**Hinweis:** Wenn eine Config-Datei angegeben wird, werden alle Kommandozeilen-Optionen ignoriert.
+**Hinweis:** Wenn eine Config-Datei angegeben wird, werden alle Kommandozeilen-Optionen ignoriert außer `-d|--debug` und `-n|--dry-run`, die die Config-Datei überschreiben können.
 
 ## Was in InfluxDB geschrieben wird
 

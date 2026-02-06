@@ -85,7 +85,7 @@ debug=0
 dry_run=0
 ```
 
-**Note:** If a config file is specified, all command-line options are ignored.
+**Note:** If a config file is specified, all command-line options are ignored except `-d|--debug` and `-n|--dry-run`, which can override the config file settings.
 
 ## What Gets Written to InfluxDB
 

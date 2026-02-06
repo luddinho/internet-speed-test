@@ -32,8 +32,8 @@ Options:
   -m, --max-runtime SECONDS     Maximum script runtime in seconds (0 = no limit, default: 0)
   -u, --url URL                 Set download URL for speed test (REQUIRED)
   -i, --isp PROVIDER            ISP provider name (auto-detected if not specified)
-  -d, --debug                   Enable debug output
-  -n, --dry-run                 Run in dry-run mode (do not send data to InfluxDB)
+  -d, --debug                   Enable debug output (overrides config file)
+  -n, --dry-run                 Run in dry-run mode (overrides config file)
 
   -s, --server URL              InfluxDB server URL (REQUIRED)
   -p, --port PORT               InfluxDB server port (REQUIRED)
@@ -102,6 +102,10 @@ dry_run=0
 # Config file path (empty by default)
 config_file=""
 
+# Flags to track if debug/dry-run were set via command line
+cmdline_debug=""
+cmdline_dry_run=""
+
 # --------------------------------------------------------------------------------
 # Parse command-line arguments
 # --------------------------------------------------------------------------------
@@ -129,10 +133,12 @@ while [[ $# -gt 0 ]]; do
             ;;
         -d|--debug)
             debug=1
+            cmdline_debug=1
             shift
             ;;
         -n|--dry-run)
             dry_run=1
+            cmdline_dry_run=1
             shift
             ;;
         -s|--server)
@@ -236,6 +242,14 @@ if [ -n "$config_file" ]; then
                 ;;
         esac
     done < "$config_file"
+
+    # Override debug and dry-run from command line if they were set
+    if [ -n "$cmdline_debug" ]; then
+        debug=1
+    fi
+    if [ -n "$cmdline_dry_run" ]; then
+        dry_run=1
+    fi
 fi
 
 # --------------------------------------------------------------------------------
