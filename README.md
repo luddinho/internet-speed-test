@@ -2,6 +2,8 @@
 
 🇩🇪 [Deutsch](README.de.md) | 🇬🇧 English
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A Bash script that measures download speed with `curl`, enriches the result with basic network metadata (IP, geo lookup, traceroute hops), and writes the measurement to InfluxDB 2.x using line protocol.
 
 ## Features

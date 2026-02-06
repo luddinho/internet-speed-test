@@ -2,6 +2,8 @@
 
 🇩🇪 Deutsch | 🇬🇧 [English](README.md)
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Ein Bash-Skript, das die Download-Geschwindigkeit mit `curl` misst, die Messung mit Netzwerk-Metadaten (IP, Geo-Check, Traceroute-Hops) anreichert und die Daten per Line Protocol in InfluxDB 2.x schreibt.
 
 ## Funktionen
