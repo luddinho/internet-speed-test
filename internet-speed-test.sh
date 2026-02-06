@@ -27,6 +27,7 @@ Version: $VERSION
 Usage: $(basename "$0") [OPTIONS]
 
 Options:
+  -c, --config FILE             Load configuration from file (overrides all other options)
   -t, --timeout SECONDS         Set curl timeout in seconds (default: 30)
   -m, --max-runtime SECONDS     Maximum script runtime in seconds (0 = no limit, default: 0)
   -u, --url URL                 Set download URL for speed test (REQUIRED)
@@ -47,6 +48,21 @@ Options:
 Example:
     $(basename "$0") -u https://example.com/file.zip -s http://192.0.2.10 -p 8086 -b mybucket -o myorg -a mytoken
     $(basename "$0") -u https://example.com/file.zip -i telekom -m 120 -s http://192.0.2.10 -p 8086 -b mybucket -o myorg -f /path/to/token.txt
+    $(basename "$0") -c config/config.example.conf
+
+Config file format (key=value):
+    url=https://example.com/file.zip
+    influx_server=http://192.0.2.10
+    influx_port=8086
+    influx_bucket=mybucket
+    influx_org=myorg
+    influx_token=mytoken
+    # Optional parameters:
+    timeout=30
+    max_runtime=120
+    isp=telekom
+    debug=1
+    dry_run=0
 EOF
     exit 0
 }
@@ -83,11 +99,18 @@ debug=0
 # Default dry-run mode (0 = off, 1 = on)
 dry_run=0
 
+# Config file path (empty by default)
+config_file=""
+
 # --------------------------------------------------------------------------------
 # Parse command-line arguments
 # --------------------------------------------------------------------------------
 while [[ $# -gt 0 ]]; do
     case $1 in
+        -c|--config)
+            config_file="$2"
+            shift 2
+            ;;
         -t|--timeout)
             timeout="$2"
             shift 2
@@ -146,6 +169,74 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# --------------------------------------------------------------------------------
+# Load configuration from file if specified (overrides all command-line options)
+# --------------------------------------------------------------------------------
+if [ -n "$config_file" ]; then
+    if [ ! -f "$config_file" ]; then
+        echo "Error: Config file '$config_file' does not exist" >&2
+        exit 1
+    fi
+    if [ ! -r "$config_file" ]; then
+        echo "Error: Config file '$config_file' is not readable" >&2
+        exit 1
+    fi
+
+    # Read config file and set variables
+    # Format: key=value (one per line, # for comments)
+    while IFS='=' read -r key value || [ -n "$key" ]; do
+        # Skip empty lines and comments
+        [[ -z "$key" || "$key" =~ ^[[:space:]]*# ]] && continue
+
+        # Trim whitespace from key and value
+        key=$(echo "$key" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+        # Set variables based on key
+        case "$key" in
+            timeout)
+                timeout="$value"
+                ;;
+            max_runtime)
+                max_runtime="$value"
+                ;;
+            url)
+                url="$value"
+                ;;
+            isp)
+                isp="$value"
+                ;;
+            debug)
+                debug="$value"
+                ;;
+            dry_run)
+                dry_run="$value"
+                ;;
+            influx_server)
+                influx_server="$value"
+                ;;
+            influx_port)
+                influx_port="$value"
+                ;;
+            influx_bucket)
+                influx_bucket="$value"
+                ;;
+            influx_org)
+                influx_org="$value"
+                ;;
+            influx_token)
+                influx_token="$value"
+                ;;
+            influx_token_file)
+                influx_token_file="$value"
+                ;;
+            *)
+                echo "Warning: Unknown config key '$key' in $config_file" >&2
+                ;;
+        esac
+    done < "$config_file"
+fi
 
 # --------------------------------------------------------------------------------
 # Read token from file if file option is provided

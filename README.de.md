@@ -39,6 +39,7 @@ chmod +x internet-speed-test.sh
 ## Optionen
 
 ```
+-c, --config FILE             Konfiguration aus Datei laden (überschreibt alle anderen Optionen)
 -t, --timeout SECONDS         curl timeout in seconds (default: 30)
 -m, --max-runtime SECONDS     max script runtime (0 = no limit)
 -u, --url URL                 download URL for speed test (required)
@@ -56,6 +57,35 @@ chmod +x internet-speed-test.sh
 
 -h, --help                    show help
 ```
+
+## Config-Datei
+
+Du kannst eine Config-Datei anstelle von Kommandozeilen-Optionen verwenden:
+
+```bash
+./internet-speed-test.sh -c /pfad/zur/config.conf
+```
+
+Beispiel Config-Datei Format (siehe [config/config.example.conf](config/config.example.conf)):
+
+```ini
+# Erforderliche Parameter
+url=https://nbg1-speed.hetzner.com/100MB.bin
+influx_server=http://192.0.2.10
+influx_port=8086
+influx_bucket=mybucket
+influx_org=myorg
+influx_token=mytoken
+
+# Optionale Parameter
+timeout=30
+max_runtime=60
+isp=telekom
+debug=0
+dry_run=0
+```
+
+**Hinweis:** Wenn eine Config-Datei angegeben wird, werden alle Kommandozeilen-Optionen ignoriert.
 
 ## Was in InfluxDB geschrieben wird
 
