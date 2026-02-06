@@ -94,3 +94,13 @@ Timestamp: aktuelle Epoch-Zeit in Nanosekunden via `date +%s%N`.
 - Bei fehlenden Parametern alle erforderlichen InfluxDB-Optionen angeben.
 - Bei Verbindungsproblemen Server-URL/Port und Token-Rechte pruefen.
 - Mit `--debug` Details anzeigen und mit `--dry-run` Payload pruefen ohne zu schreiben.
+
+## Git Tipps
+
+Wenn dein Dateisystem die Executable-Bits unerwartet aendert, kannst du das File-Mode-Tracking fuer dieses Repo deaktivieren:
+
+```bash
+git config core.fileMode false
+```
+
+Hinweis: Diese Einstellung ist lokal und wird nicht zum Remote gepusht.

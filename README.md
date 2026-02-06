@@ -94,3 +94,13 @@ Timestamp: current epoch time in nanoseconds as emitted by `date +%s%N`.
 - If the script exits with missing parameter errors, ensure all required InfluxDB options are provided.
 - For connection issues, verify the server URL/port and token permissions.
 - Use `--debug` for detailed output and `--dry-run` to validate payload without writing.
+
+## Git Tips
+
+If your filesystem toggles executable bits unexpectedly, you can disable file mode tracking for this repo:
+
+```bash
+git config core.fileMode false
+```
+
+Note: This is a local-only setting and does not get pushed to the remote.
