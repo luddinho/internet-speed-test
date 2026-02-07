@@ -113,6 +113,63 @@ Fields:
 
 Timestamp: aktuelle Epoch-Zeit in Nanosekunden via `date +%s%N`.
 
+## Grafana Dashboard
+
+Ein umfassendes Grafana-Dashboard ist enthalten unter [dashboards/internet-speed-test-dashboard.json](dashboards/internet-speed-test-dashboard.json).
+
+### Dashboard-Funktionen
+
+Das Dashboard bietet detaillierte Einblicke in die Leistung Ihrer Internetverbindung:
+
+**Grundlegende Metriken:**
+- **Aktuelle Geschwindigkeit**: Download-Geschwindigkeit in Echtzeit
+- **Durchschnittsgeschwindigkeit**: Mittlere Geschwindigkeit über den ausgewählten Zeitraum
+- **Min/Max Geschwindigkeit**: Niedrigste und höchste aufgezeichnete Geschwindigkeiten
+- **Gesamtzahl der Tests**: Anzahl aller durchgeführten Geschwindigkeitstests
+
+**Erweiterte Analysen:**
+- **Geschwindigkeits-Perzentile (P50, P95, P99)**: Zeigt zuverlässige Leistung über alle Bedingungen hinweg
+  - P50 (Median): 50% der Tests erreichten diese Geschwindigkeit oder höher
+  - P95: 95% der Tests erreichten diese Geschwindigkeit oder höher
+  - P99: 99% der Tests erreichten diese Geschwindigkeit oder höher
+  - Diese Metriken aggregieren alle Tests unabhängig von Serverstandort, ISP oder Testtyp
+
+- **CDN-Erkennung**: Überwacht, ob Ihr ISP Sie durch CDNs leitet
+  - Wert "1": Direktes Routing (einzelner Serverstandort)
+  - Wert "2+": CDN erkannt (mehrere Serverstandorte in 24h)
+
+- **Verbindungszuverlässigkeit**: Zeigt die Erfolgsrate in Prozent im Zeitverlauf
+  - Verfolgt erfolgreiche Tests (retcode=0) vs. Timeouts/Fehler
+  - Aggregiert über alle Bedingungen für Gesamtzuverlässigkeit
+
+**Visualisierungen:**
+- **Geschwindigkeit im Zeitverlauf**: Zeitreihendiagramm mit Download-Geschwindigkeitstrends
+- **Geschwindigkeit nach Tageszeit**: Heatmap zeigt Leistungsmuster im Tagesverlauf
+- **Geschwindigkeit vs. Netzwerk-Hop-Anzahl**: Dual-Achsen-Diagramm korreliert Netzwerkdistanz mit Geschwindigkeit
+- **Serverstandorte im Zeitverlauf**: State Timeline zeigt, welche Standorte verwendet werden
+- **Erfolgs- vs. Fehlerrate**: Balken- und Kreisdiagramme zeigen Testergebnis-Verteilung
+- **Rückgabecode-Aufschlüsselung**: Detaillierte Erfolgs-/Timeout-/Fehleranalyse
+- **Geschwindigkeitstest-Serverstandorte**: Geografische Karte der Testserver-Standorte
+
+### Dashboard-Konfiguration
+
+Alle aggregierten Metriken verwenden den vollständigen Datensatz:
+- Zeitbereich: Gesteuert durch Dashboard-Zeitauswahl (Standard: letzte 12h)
+- Aggregation: Kombiniert alle Tests unabhängig von Serverstandort, ISP, Domain oder Testtyp
+- Auto-Refresh: 30 Sekunden
+
+### Dashboard importieren
+
+1. Öffnen Sie Grafana
+2. Gehen Sie zu **Dashboards** → **Import**
+3. Laden Sie `dashboards/internet-speed-test-dashboard.json` hoch
+4. Wählen Sie Ihre InfluxDB-Datenquelle
+5. Klicken Sie auf **Import**
+
+Das Dashboard benötigt:
+- Grafana v12.3.2 oder neuer
+- InfluxDB-Datenquelle konfiguriert mit Zugriff auf Ihren speed-test-metrics Bucket
+
 ## Hinweise
 
 - Die Download-URL sollte auf eine ausreichend grosse Datei zeigen (z.B. 100MB) fuer stabile Werte.
