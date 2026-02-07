@@ -3,4 +3,5 @@
 
 # But track these files
 !.gitignore
-!debug-influxdb.example.sh
+!debug-influxdb-access.sh
+!debug-influxdb-querey.sh
