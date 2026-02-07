@@ -369,6 +369,8 @@ if [ "$curl_retcode" -ne 0 ]; then
         server_ip="n.a."
         server_city="n.a."
         server_country="n.a."
+        server_lat="0"
+        server_lon="0"
         location="unknown"
 else
         # parse speed (bytes/sec), http response code, and remote IP
@@ -383,12 +385,14 @@ else
         # Query geolocation API to get actual server location
         # Using ip-api.com (free, no API key required)
         if [ -n "$server_ip" ] && [ "$server_ip" != "0.0.0.0" ]; then
-            geo_data=$(curl -s --connect-timeout 5 --max-time 10 "http://ip-api.com/json/$server_ip?fields=status,city,country,countryCode" 2>/dev/null)
+            geo_data=$(curl -s --connect-timeout 5 --max-time 10 "http://ip-api.com/json/$server_ip?fields=status,city,country,countryCode,lat,lon" 2>/dev/null)
 
             # Parse JSON response (simple approach without jq dependency)
             if echo "$geo_data" | grep -q '"status":"success"'; then
                 server_city=$(echo "$geo_data" | grep -o '"city":"[^"]*"' | cut -d'"' -f4)
                 server_country=$(echo "$geo_data" | grep -o '"countryCode":"[^"]*"' | cut -d'"' -f4)
+                server_lat=$(echo "$geo_data" | grep -o '"lat":[^,}]*' | cut -d':' -f2)
+                server_lon=$(echo "$geo_data" | grep -o '"lon":[^,}]*' | cut -d':' -f2)
 
                 # Set location based on city or fallback to country code
                 if [ -n "$server_city" ]; then
@@ -402,6 +406,8 @@ else
                 # Geolocation API failed, fall back to URL parsing
                 server_city="n.a."
                 server_country="n.a."
+                server_lat="0"
+                server_lon="0"
                 location=$(echo "$domain" | awk -F. '{print $1}' | awk -F- '{print $1}')
                 if [ -z "$location" ] || [ "$location" = "$domain" ]; then
                     location="unknown"
@@ -410,6 +416,8 @@ else
         else
             server_city="n.a."
             server_country="n.a."
+            server_lat="0"
+            server_lon="0"
             location="unknown"
         fi
 fi
@@ -539,6 +547,8 @@ if [ "$debug" -eq 1 ]; then
     printf "%-25s : %s\n" "Traceroute Target IP" "$traceroute_target_ip"
     printf "%-25s : %s\n" "Server City" "$server_city"
     printf "%-25s : %s\n" "Server Country" "$server_country"
+    printf "%-25s : %s\n" "Server Latitude" "$server_lat"
+    printf "%-25s : %s\n" "Server Longitude" "$server_lon"
     printf "%-25s : %s\n" "Server Location" "$location"
     printf "%-25s : %s\n" "Download URL" "$url"
     printf "%-25s : %s\n" "Client IPv4" "$ipv4"
@@ -564,7 +574,7 @@ fi
 # For our case:
 # measurement: speed_test
 # tags: isp, target_domain, location, test_type
-# fields: speed, speed_mbps, http_code, retcode, client_ip, server_ip, traceroute_target_ip, server_city, server_country, hop_count, first_hop, last_hop
+# fields: speed, speed_mbps, http_code, retcode, client_ip, server_ip, traceroute_target_ip, server_city, server_country, server_lat, server_lon, hop_count, first_hop, last_hop
 # timestamp: epoch_time_ms
 # Example line protocol:
 # speed_test,isp=telekom,target_domain=nbg1-speed.hetzner.com,location=Nuremberg,test_type=download speed=12500000,speed_mbps=100.00,http_code=200,retcode=0,client_ip="198.51.100.23",server_ip="203.0.113.45",traceroute_target_ip="203.0.113.46",server_city="Nuremberg",server_country="DE",hop_count=15,first_hop="192.0.2.1",last_hop="203.0.113.1" 1690000000000
@@ -572,12 +582,12 @@ fi
 if [ "$dry_run" -eq 1 ]; then
     echo "[DRY-RUN] Would send to InfluxDB:"
     echo "[DRY-RUN] URL: $influx_server:$influx_port/api/v2/write?bucket=$influx_bucket&org=$influx_org"
-    echo "[DRY-RUN] Data: speed_test,isp=$isp,target_domain=$domain,location=$location,test_type=download speed=$speed,speed_mbps=$speed_mbps,http_code=$http_code,retcode=$curl_retcode,client_ip=\"$ipv4\",server_ip=\"$server_ip\",traceroute_target_ip=\"$traceroute_target_ip\",server_city=\"$server_city\",server_country=\"$server_country\",hop_count=$hop_count,first_hop=\"$first_hop\",last_hop=\"$last_hop\" $epoch_time_ms"
+    echo "[DRY-RUN] Data: speed_test,isp=$isp,target_domain=$domain,location=$location,test_type=download speed=$speed,speed_mbps=$speed_mbps,http_code=$http_code,retcode=$curl_retcode,client_ip=\"$ipv4\",server_ip=\"$server_ip\",traceroute_target_ip=\"$traceroute_target_ip\",server_city=\"$server_city\",server_country=\"$server_country\",server_lat=$server_lat,server_lon=$server_lon,hop_count=$hop_count,first_hop=\"$first_hop\",last_hop=\"$last_hop\" $epoch_time_ms"
     echo "[DRY-RUN] Headers: Authorization: Token ***[REDACTED]***, Content-Type: text/plain"
     influx_retcode=0
 else
     curl -X POST \
-    --data "speed_test,isp=$isp,target_domain=$domain,location=$location,test_type=download speed=$speed,speed_mbps=$speed_mbps,http_code=$http_code,retcode=$curl_retcode,client_ip=\"$ipv4\",server_ip=\"$server_ip\",traceroute_target_ip=\"$traceroute_target_ip\",server_city=\"$server_city\",server_country=\"$server_country\",hop_count=$hop_count,first_hop=\"$first_hop\",last_hop=\"$last_hop\" $epoch_time_ms" \
+    --data "speed_test,isp=$isp,target_domain=$domain,location=$location,test_type=download speed=$speed,speed_mbps=$speed_mbps,http_code=$http_code,retcode=$curl_retcode,client_ip=\"$ipv4\",server_ip=\"$server_ip\",traceroute_target_ip=\"$traceroute_target_ip\",server_city=\"$server_city\",server_country=\"$server_country\",server_lat=$server_lat,server_lon=$server_lon,hop_count=$hop_count,first_hop=\"$first_hop\",last_hop=\"$last_hop\" $epoch_time_ms" \
     -H "Authorization: Token $influx_token" \
     -H 'Content-Type: text/plain' \
     "$influx_server:$influx_port/api/v2/write?bucket=$influx_bucket&org=$influx_org"

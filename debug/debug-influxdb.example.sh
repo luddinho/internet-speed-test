@@ -1,3 +1,7 @@
+#!/bin/bash
+# InfluxDB Connection Test Script
+# Tests authentication, bucket access, and write permissions
+
 # Set your variables
 INFLUX_SERVER="http://YOUR_SERVER_IP:8086"
 INFLUX_TOKEN="YOUR_TOKEN_HERE"
