@@ -6,7 +6,7 @@
     "namespace": "default",
     "uid": "BeqNxfBmpfHXdc1WszKbY73bp6bZOESHpPq76wSrJl4X",
     "resourceVersion": "59",
-    "generation": 64,
+    "generation": 65,
     "creationTimestamp": "2026-02-07T01:05:19Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "12"
@@ -63,7 +63,7 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 6,
+          "h": 8,
           "w": 13,
           "x": 0,
           "y": 0
@@ -331,310 +331,6 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              }
-            },
-            "fieldMinMax": false,
-            "mappings": [],
-            "unit": "none"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 12,
-          "w": 5,
-          "x": 0,
-          "y": 6
-        },
-        "id": 20,
-        "options": {
-          "displayLabels": [
-            "name",
-            "value"
-          ],
-          "legend": {
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true,
-            "values": [
-              "percent"
-            ]
-          },
-          "pieType": "pie",
-          "reduceOptions": {
-            "calcs": [],
-            "fields": "",
-            "values": false
-          },
-          "sort": "desc",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> filter(fn: (r) => r._value == 0)\n  |> group()\n  |> count()\n  |> map(fn: (r) => ({Success: r._value}))\n  |> yield(name: \"success\")",
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "hide": false,
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> filter(fn: (r) => r._value == 28)\n  |> group()\n  |> count()\n  |> map(fn: (r) => ({Timeout: r._value}))\n  |> yield(name: \"timeout\")",
-            "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "hide": false,
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> filter(fn: (r) => r._value != 28)\n  |> filter(fn: (r) => r._value != 0)\n  |> group()\n  |> count()\n  |> map(fn: (r) => ({Other: r._value}))\n  |> yield(name: \"other\")",
-            "refId": "C"
-          }
-        ],
-        "title": "Success vs Fail (Pie)",
-        "type": "piechart"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "fillOpacity": 80,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": 0
-                },
-                {
-                  "color": "yellow",
-                  "value": 50
-                },
-                {
-                  "color": "green",
-                  "value": 90
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 12,
-          "w": 4,
-          "x": 5,
-          "y": 6
-        },
-        "id": 18,
-        "options": {
-          "barRadius": 0,
-          "barWidth": 0.97,
-          "fullHighlight": false,
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "orientation": "auto",
-          "showValue": "auto",
-          "stacking": "none",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          },
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "data = from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> group()\n\ntot = data\n  |> count(column: \"_value\")\n  |> findRecord(fn: (key) => true, idx: 0)\n\nsuccess = data\n  |> filter(fn: (r) => r._value == 0)\n  |> count(column: \"_value\")\n  |> map(fn: (r) => ({ _time: r._time, status: \"success\", _value: if tot._value > 0 then float(v: r._value) / float(v: tot._value) * 100.0 else 0.0 }))\n\nfailed = data\n  |> filter(fn: (r) => r._value != 0)\n  |> count(column: \"_value\")\n  |> map(fn: (r) => ({ _time: r._time, status: \"fail\", _value: if tot._value > 0 then float(v: r._value) / float(v: tot._value) * 100.0 else 0.0 }))\n\nunion(tables: [success, failed])\n  |> group()\n  |> yield(name: \"retcode_success_fail_pct\")",
-            "refId": "A"
-          }
-        ],
-        "title": "Success vs Fail (Pct)",
-        "type": "barchart"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "fillOpacity": 80,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineWidth": 1,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "fieldMinMax": false,
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Success"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "green",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Timeout"
-              },
-              "properties": [
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "orange",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 12,
-          "w": 4,
-          "x": 9,
-          "y": 6
-        },
-        "id": 21,
-        "options": {
-          "barRadius": 0,
-          "barWidth": 0.97,
-          "fullHighlight": false,
-          "groupWidth": 0.7,
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "orientation": "auto",
-          "showValue": "auto",
-          "stacking": "none",
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "single",
-            "sort": "none"
-          },
-          "xTickLabelRotation": 0,
-          "xTickLabelSpacing": 0
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "data = from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> group()\n\nsuccess = data\n  |> filter(fn: (r) => r._value == 0)\n  |> count()\n  |> map(fn: (r) => ({ category: \"Success\", count: r._value }))\n\ntimeout = data\n  |> filter(fn: (r) => r._value == 28)\n  |> count()\n  |> map(fn: (r) => ({ category: \"Timeout\", count: r._value }))\n\nother = data\n  |> filter(fn: (r) => r._value != 28 and r._value != 0)\n  |> count()\n  |> map(fn: (r) => ({ category: \"Other\", count: r._value }))\n\nunion(tables: [success, timeout, other])\n  |> group()\n  |> yield(name: \"retcode_counts\")",
-            "refId": "A"
-          }
-        ],
-        "title": "Return Code Counts",
-        "type": "barchart"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
               "mode": "thresholds"
             },
             "mappings": [
@@ -845,6 +541,310 @@
         ],
         "title": "Target Server",
         "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 5,
+          "x": 0,
+          "y": 8
+        },
+        "id": 20,
+        "options": {
+          "displayLabels": [
+            "name",
+            "value"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true,
+            "values": [
+              "percent"
+            ]
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [],
+            "fields": "",
+            "values": false
+          },
+          "sort": "desc",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.3.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> filter(fn: (r) => r._value == 0)\n  |> group()\n  |> count()\n  |> map(fn: (r) => ({Success: r._value}))\n  |> yield(name: \"success\")",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "hide": false,
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> filter(fn: (r) => r._value == 28)\n  |> group()\n  |> count()\n  |> map(fn: (r) => ({Timeout: r._value}))\n  |> yield(name: \"timeout\")",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "hide": false,
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> filter(fn: (r) => r._value != 28)\n  |> filter(fn: (r) => r._value != 0)\n  |> group()\n  |> count()\n  |> map(fn: (r) => ({Other: r._value}))\n  |> yield(name: \"other\")",
+            "refId": "C"
+          }
+        ],
+        "title": "Success vs Fail (Pie)",
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 1,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 50
+                },
+                {
+                  "color": "green",
+                  "value": 90
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 4,
+          "x": 5,
+          "y": 8
+        },
+        "id": 18,
+        "options": {
+          "barRadius": 0,
+          "barWidth": 0.97,
+          "fullHighlight": false,
+          "groupWidth": 0.7,
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "orientation": "auto",
+          "showValue": "auto",
+          "stacking": "none",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          },
+          "xTickLabelRotation": 0,
+          "xTickLabelSpacing": 0
+        },
+        "pluginVersion": "12.3.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "data = from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> group()\n\ntot = data\n  |> count(column: \"_value\")\n  |> findRecord(fn: (key) => true, idx: 0)\n\nsuccess = data\n  |> filter(fn: (r) => r._value == 0)\n  |> count(column: \"_value\")\n  |> map(fn: (r) => ({ _time: r._time, status: \"success\", _value: if tot._value > 0 then float(v: r._value) / float(v: tot._value) * 100.0 else 0.0 }))\n\nfailed = data\n  |> filter(fn: (r) => r._value != 0)\n  |> count(column: \"_value\")\n  |> map(fn: (r) => ({ _time: r._time, status: \"fail\", _value: if tot._value > 0 then float(v: r._value) / float(v: tot._value) * 100.0 else 0.0 }))\n\nunion(tables: [success, failed])\n  |> group()\n  |> yield(name: \"retcode_success_fail_pct\")",
+            "refId": "A"
+          }
+        ],
+        "title": "Success vs Fail (Pct)",
+        "type": "barchart"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "fillOpacity": 80,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 1,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Success"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Timeout"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 4,
+          "x": 9,
+          "y": 8
+        },
+        "id": 21,
+        "options": {
+          "barRadius": 0,
+          "barWidth": 0.97,
+          "fullHighlight": false,
+          "groupWidth": 0.7,
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "orientation": "auto",
+          "showValue": "auto",
+          "stacking": "none",
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          },
+          "xTickLabelRotation": 0,
+          "xTickLabelSpacing": 0
+        },
+        "pluginVersion": "12.3.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "data = from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> group()\n\nsuccess = data\n  |> filter(fn: (r) => r._value == 0)\n  |> count()\n  |> map(fn: (r) => ({ category: \"Success\", count: r._value }))\n\ntimeout = data\n  |> filter(fn: (r) => r._value == 28)\n  |> count()\n  |> map(fn: (r) => ({ category: \"Timeout\", count: r._value }))\n\nother = data\n  |> filter(fn: (r) => r._value != 28 and r._value != 0)\n  |> count()\n  |> map(fn: (r) => ({ category: \"Other\", count: r._value }))\n\nunion(tables: [success, timeout, other])\n  |> group()\n  |> yield(name: \"retcode_counts\")",
+            "refId": "A"
+          }
+        ],
+        "title": "Return Code Counts",
+        "type": "barchart"
       },
       {
         "datasource": {
@@ -2179,7 +2179,7 @@
       ]
     },
     "time": {
-      "from": "now-2d",
+      "from": "now-24h",
       "to": "now"
     },
     "timepicker": {
@@ -2198,7 +2198,7 @@
     "timezone": "browser",
     "title": "Internet Speed Test Monitoring",
     "uid": "internet-speed-test",
-    "version": 64
+    "version": 65
   },
   "status": {}
 }
