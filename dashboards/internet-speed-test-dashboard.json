@@ -5,8 +5,8 @@
     "name": "internet-speed-test",
     "namespace": "default",
     "uid": "BeqNxfBmpfHXdc1WszKbY73bp6bZOESHpPq76wSrJl4X",
-    "resourceVersion": "59",
-    "generation": 65,
+    "resourceVersion": "73",
+    "generation": 80,
     "creationTimestamp": "2026-02-07T01:05:19Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "12"
@@ -14,8 +14,8 @@
     "annotations": {
       "grafana.app/createdBy": "user:df24738hied4we",
       "grafana.app/updatedBy": "user:df24738hied4we",
-      "grafana.app/updatedTimestamp": "2026-02-07T23:34:50Z",
-      "grafana.app/saved-from-ui": "Grafana v12.3.2 (df2547decd)"
+      "grafana.app/updatedTimestamp": "2026-02-14T05:06:52Z",
+      "grafana.app/saved-from-ui": "Grafana v12.3.3 (2a14494b2d)"
     }
   },
   "spec": {
@@ -48,83 +48,6 @@
         },
         "fieldConfig": {
           "defaults": {
-            "custom": {
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "scaleDistribution": {
-                "type": "linear"
-              }
-            },
-            "unit": "Mbits"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 13,
-          "x": 0,
-          "y": 0
-        },
-        "id": 23,
-        "options": {
-          "calculate": false,
-          "cellGap": 1,
-          "cellValues": {},
-          "color": {
-            "exponent": 0.5,
-            "fill": "dark-orange",
-            "mode": "scheme",
-            "reverse": true,
-            "scale": "exponential",
-            "scheme": "RdYlGn",
-            "steps": 64
-          },
-          "exemplars": {
-            "color": "rgba(255,0,255,0.7)"
-          },
-          "filterValues": {
-            "le": 1e-9
-          },
-          "legend": {
-            "show": true
-          },
-          "rowsFrame": {
-            "layout": "auto"
-          },
-          "tooltip": {
-            "mode": "single",
-            "showColorScale": false,
-            "yHistogram": false
-          },
-          "yAxis": {
-            "axisPlacement": "left",
-            "reverse": false
-          }
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group()\n  |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)\n  |> yield(name: \"hourly_speeds\")",
-            "refId": "A"
-          }
-        ],
-        "title": "Speed by Hour of Day",
-        "type": "heatmap"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
             "color": {
               "mode": "thresholds"
             },
@@ -143,8 +66,8 @@
         },
         "gridPos": {
           "h": 6,
-          "w": 3,
-          "x": 13,
+          "w": 4,
+          "x": 0,
           "y": 0
         },
         "id": 25,
@@ -165,7 +88,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -218,7 +141,7 @@
         "gridPos": {
           "h": 6,
           "w": 4,
-          "x": 16,
+          "x": 4,
           "y": 0
         },
         "id": 6,
@@ -239,7 +162,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -251,76 +174,6 @@
           }
         ],
         "title": "Average Speed by ISP (Last 24h)",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": 0
-                },
-                {
-                  "color": "yellow",
-                  "value": 50
-                },
-                {
-                  "color": "green",
-                  "value": 100
-                }
-              ]
-            },
-            "unit": "Mbits"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 4,
-          "x": 20,
-          "y": 0
-        },
-        "id": 5,
-        "options": {
-          "colorMode": "none",
-          "graphMode": "area",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "value",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> last()\n  |> yield(name: \"current\")",
-            "refId": "A"
-          }
-        ],
-        "title": "Current Speed",
         "type": "stat"
       },
       {
@@ -373,10 +226,10 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 6,
-          "w": 3,
-          "x": 13,
-          "y": 6
+          "h": 3,
+          "w": 4,
+          "x": 8,
+          "y": 0
         },
         "id": 13,
         "options": {
@@ -396,7 +249,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -443,10 +296,10 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 6,
+          "h": 3,
           "w": 4,
-          "x": 16,
-          "y": 6
+          "x": 12,
+          "y": 0
         },
         "id": 10,
         "options": {
@@ -466,7 +319,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -478,6 +331,76 @@
           }
         ],
         "title": "Network Hops",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 50
+                },
+                {
+                  "color": "green",
+                  "value": 100
+                }
+              ]
+            },
+            "unit": "Mbits"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 16,
+          "y": 0
+        },
+        "id": 5,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> last()\n  |> yield(name: \"current\")",
+            "refId": "A"
+          }
+        ],
+        "title": "Current Speed",
         "type": "stat"
       },
       {
@@ -508,7 +431,7 @@
           "h": 6,
           "w": 4,
           "x": 20,
-          "y": 6
+          "y": 0
         },
         "id": 11,
         "options": {
@@ -528,7 +451,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -541,6 +464,352 @@
         ],
         "title": "Target Server",
         "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 50
+                },
+                {
+                  "color": "green",
+                  "value": 100
+                }
+              ]
+            },
+            "unit": "Mbits"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "P50 (Median)"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "B"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "P95"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "C"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "P99"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 8,
+          "y": 3
+        },
+        "id": 22,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {
+            "titleSize": 12,
+            "valueSize": 18
+          },
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group()\n  |> quantile(q: 0.50, method: \"estimate_tdigest\")\n  |> map(fn: (r) => ({ _time: r._time, _field: \"P50 (Median)\", _value: r._value }))\n  |> group()\n  |> yield(name: \"p50\")",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "hide": false,
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group()\n  |> quantile(q: 0.95, method: \"estimate_tdigest\")\n  |> map(fn: (r) => ({ _time: r._time, _field: \"P95\", _value: r._value }))\n  |> group()\n  |> yield(name: \"p95\")",
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "hide": false,
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group()\n  |> quantile(q: 0.99, method: \"estimate_tdigest\")\n  |> map(fn: (r) => ({ _time: r._time, _field: \"P99\", _value: r._value }))\n  |> group()\n  |> yield(name: \"p99\")",
+            "refId": "C"
+          }
+        ],
+        "title": "Speed Percentiles",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "orange",
+                  "value": 2
+                },
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 12,
+          "y": 3
+        },
+        "id": 16,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> last()\n  |> yield(name: \"retcode\")",
+            "refId": "A"
+          }
+        ],
+        "title": "Curl Return Code",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 200
+                },
+                {
+                  "color": "red",
+                  "value": 300
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 16,
+          "y": 3
+        },
+        "id": 9,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "value",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"http_code\")\n  |> last()\n  |> yield(name: \"http_code\")",
+            "refId": "A"
+          }
+        ],
+        "title": "HTTP Status",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "scaleDistribution": {
+                "type": "linear"
+              }
+            },
+            "unit": "Mbits"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "id": 23,
+        "options": {
+          "calculate": false,
+          "cellGap": 1,
+          "cellValues": {},
+          "color": {
+            "exponent": 0.5,
+            "fill": "dark-orange",
+            "mode": "scheme",
+            "reverse": true,
+            "scale": "exponential",
+            "scheme": "RdYlGn",
+            "steps": 64
+          },
+          "exemplars": {
+            "color": "rgba(255,0,255,0.7)"
+          },
+          "filterValues": {
+            "le": 1e-9
+          },
+          "legend": {
+            "show": true
+          },
+          "rowsFrame": {
+            "layout": "auto"
+          },
+          "tooltip": {
+            "mode": "single",
+            "showColorScale": false,
+            "yHistogram": false
+          },
+          "yAxis": {
+            "axisPlacement": "left",
+            "reverse": false
+          }
+        },
+        "pluginVersion": "12.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group()\n  |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)\n  |> yield(name: \"hourly_speeds\")",
+            "refId": "A"
+          }
+        ],
+        "title": "Speed by Hour of Day",
+        "type": "heatmap"
       },
       {
         "datasource": {
@@ -566,10 +835,10 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 10,
-          "w": 5,
+          "h": 12,
+          "w": 7,
           "x": 0,
-          "y": 8
+          "y": 16
         },
         "id": 20,
         "options": {
@@ -598,7 +867,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -684,10 +953,10 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 10,
-          "w": 4,
-          "x": 5,
-          "y": 8
+          "h": 12,
+          "w": 9,
+          "x": 7,
+          "y": 16
         },
         "id": 18,
         "options": {
@@ -712,7 +981,7 @@
           "xTickLabelRotation": 0,
           "xTickLabelSpacing": 0
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -804,10 +1073,10 @@
           ]
         },
         "gridPos": {
-          "h": 10,
-          "w": 4,
-          "x": 9,
-          "y": 8
+          "h": 12,
+          "w": 8,
+          "x": 16,
+          "y": 16
         },
         "id": 21,
         "options": {
@@ -832,7 +1101,7 @@
           "xTickLabelRotation": 0,
           "xTickLabelSpacing": 0
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -854,275 +1123,6 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": 0
-                },
-                {
-                  "color": "yellow",
-                  "value": 50
-                },
-                {
-                  "color": "green",
-                  "value": 100
-                }
-              ]
-            },
-            "unit": "Mbits"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "A"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "P50 (Median)"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "B"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "P95"
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "C"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "P99"
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 3,
-          "x": 13,
-          "y": 12
-        },
-        "id": 22,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto",
-          "orientation": "horizontal",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "text": {
-            "titleSize": 12,
-            "valueSize": 18
-          },
-          "textMode": "value_and_name",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group()\n  |> quantile(q: 0.50, method: \"estimate_tdigest\")\n  |> map(fn: (r) => ({ _time: r._time, _field: \"P50 (Median)\", _value: r._value }))\n  |> group()\n  |> yield(name: \"p50\")",
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "hide": false,
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group()\n  |> quantile(q: 0.95, method: \"estimate_tdigest\")\n  |> map(fn: (r) => ({ _time: r._time, _field: \"P95\", _value: r._value }))\n  |> group()\n  |> yield(name: \"p95\")",
-            "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "hide": false,
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group()\n  |> quantile(q: 0.99, method: \"estimate_tdigest\")\n  |> map(fn: (r) => ({ _time: r._time, _field: \"P99\", _value: r._value }))\n  |> group()\n  |> yield(name: \"p99\")",
-            "refId": "C"
-          }
-        ],
-        "title": "Speed Percentiles",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": 0
-                },
-                {
-                  "color": "orange",
-                  "value": 2
-                },
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 4,
-          "x": 16,
-          "y": 12
-        },
-        "id": 16,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "none",
-          "justifyMode": "center",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "value",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> last()\n  |> yield(name: \"retcode\")",
-            "refId": "A"
-          }
-        ],
-        "title": "Curl Return Code",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                },
-                {
-                  "color": "yellow",
-                  "value": 200
-                },
-                {
-                  "color": "red",
-                  "value": 300
-                }
-              ]
-            },
-            "unit": "none"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 6,
-          "w": 4,
-          "x": 20,
-          "y": 12
-        },
-        "id": 9,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "percentChangeColorMode": "standard",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showPercentChange": false,
-          "textMode": "value",
-          "wideLayout": true
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"http_code\")\n  |> last()\n  |> yield(name: \"http_code\")",
-            "refId": "A"
-          }
-        ],
-        "title": "HTTP Status",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
               "mode": "palette-classic"
             },
             "custom": {
@@ -1135,7 +1135,7 @@
               "barWidthFactor": 0.6,
               "drawStyle": "line",
               "fillOpacity": 20,
-              "gradientMode": "none",
+              "gradientMode": "opacity",
               "hideFrom": {
                 "legend": false,
                 "tooltip": false,
@@ -1171,13 +1171,429 @@
             },
             "unit": "Mbits"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "_value"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "displayName",
+                  "value": "Return Code"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "_value"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "unit",
+                  "value": "none"
+                },
+                {
+                  "id": "custom.scaleDistribution",
+                  "value": {
+                    "type": "linear"
+                  }
+                },
+                {
+                  "id": "custom.axisColorMode",
+                  "value": "series"
+                },
+                {
+                  "id": "custom.axisLabel",
+                  "value": "Return Code"
+                },
+                {
+                  "id": "custom.drawStyle",
+                  "value": "bars"
+                },
+                {
+                  "id": "custom.lineInterpolation",
+                  "value": "stepAfter"
+                },
+                {
+                  "id": "custom.barAlignment",
+                  "value": 0
+                },
+                {
+                  "id": "custom.barWidthFactor",
+                  "value": 0.2
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 20
+                },
+                {
+                  "id": "custom.gradientMode",
+                  "value": "opacity"
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "fill": "solid"
+                  }
+                },
+                {
+                  "id": "custom.axisColorMode",
+                  "value": "series"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Return Code"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 12,
           "w": 24,
           "x": 0,
-          "y": 18
+          "y": 28
+        },
+        "id": 26,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "last"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group(columns: [\"target_domain\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"by_domain\")",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "hide": false,
+            "query": "from(bucket: \"speed-test-metrics\")\n|> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n|> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n|> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n|> group()\n|> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n|> yield(name: \"last\")",
+            "refId": "B"
+          }
+        ],
+        "title": "Speed by Target Domain vs. Return Code",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 30,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "dashed"
+              }
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "yellow",
+                  "value": 90
+                },
+                {
+                  "color": "green",
+                  "value": 95
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 24,
+          "x": 0,
+          "y": 40
+        },
+        "id": 24,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "last"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> map(fn: (r) => ({ r with _value: if r._value == 0 then 1.0 else 0.0 }))\n  |> group()\n  |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)\n  |> map(fn: (r) => ({ r with _value: r._value * 100.0 }))\n  |> yield(name: \"reliability\")",
+            "refId": "A"
+          }
+        ],
+        "title": "Connection Reliability Over Time",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 20,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "Mbits"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "_value"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "displayName",
+                  "value": "Return Code"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "_value"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "unit",
+                  "value": "none"
+                },
+                {
+                  "id": "custom.scaleDistribution",
+                  "value": {
+                    "type": "linear"
+                  }
+                },
+                {
+                  "id": "custom.axisColorMode",
+                  "value": "series"
+                },
+                {
+                  "id": "custom.axisLabel",
+                  "value": "Return Code"
+                },
+                {
+                  "id": "custom.drawStyle",
+                  "value": "bars"
+                },
+                {
+                  "id": "custom.lineInterpolation",
+                  "value": "stepAfter"
+                },
+                {
+                  "id": "custom.barAlignment",
+                  "value": 0
+                },
+                {
+                  "id": "custom.barWidthFactor",
+                  "value": 0.2
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 20
+                },
+                {
+                  "id": "custom.gradientMode",
+                  "value": "opacity"
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "fill": "solid"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Return Code"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 24,
+          "x": 0,
+          "y": 49
         },
         "id": 2,
         "options": {
@@ -1196,7 +1612,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -1205,9 +1621,18 @@
             },
             "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group(columns: [\"isp\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"by_isp\")",
             "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "hide": false,
+            "query": "from(bucket: \"speed-test-metrics\")\n|> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n|> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n|> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n|> group()\n|> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n|> yield(name: \"last\")",
+            "refId": "B"
           }
         ],
-        "title": "Speed by ISP Provider",
+        "title": "Speed by ISP Provider vs. Return Code",
         "type": "timeseries"
       },
       {
@@ -1272,7 +1697,7 @@
           "h": 12,
           "w": 24,
           "x": 0,
-          "y": 30
+          "y": 61
         },
         "id": 1,
         "options": {
@@ -1291,7 +1716,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -1367,7 +1792,7 @@
           "h": 12,
           "w": 24,
           "x": 0,
-          "y": 42
+          "y": 73
         },
         "id": 3,
         "options": {
@@ -1386,7 +1811,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -1462,7 +1887,7 @@
           "h": 13,
           "w": 12,
           "x": 0,
-          "y": 54
+          "y": 85
         },
         "id": 17,
         "options": {
@@ -1480,7 +1905,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -1534,7 +1959,7 @@
           "h": 13,
           "w": 12,
           "x": 12,
-          "y": 54
+          "y": 85
         },
         "id": 14,
         "options": {
@@ -1553,7 +1978,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -1566,325 +1991,6 @@
         ],
         "title": "Server Locations Over Time (CDN Switching)",
         "type": "state-timeline"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 30,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "line"
-              }
-            },
-            "mappings": [],
-            "max": 100,
-            "min": 0,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": 0
-                },
-                {
-                  "color": "yellow",
-                  "value": 90
-                },
-                {
-                  "color": "green",
-                  "value": 95
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 9,
-          "w": 24,
-          "x": 0,
-          "y": 67
-        },
-        "id": 24,
-        "options": {
-          "legend": {
-            "calcs": [
-              "mean",
-              "last"
-            ],
-            "displayMode": "table",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "desc"
-          }
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"retcode\")\n  |> map(fn: (r) => ({ r with _value: if r._value == 0 then 1.0 else 0.0 }))\n  |> group()\n  |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)\n  |> map(fn: (r) => ({ r with _value: r._value * 100.0 }))\n  |> yield(name: \"reliability\")",
-            "refId": "A"
-          }
-        ],
-        "title": "Connection Reliability Over Time",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 20,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "Mbits"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 11,
-          "w": 12,
-          "x": 0,
-          "y": 76
-        },
-        "id": 4,
-        "options": {
-          "legend": {
-            "calcs": [
-              "mean",
-              "last"
-            ],
-            "displayMode": "table",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "desc"
-          }
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\")\n  |> group(columns: [\"target_domain\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"by_domain\")",
-            "refId": "A"
-          }
-        ],
-        "title": "Speed by Target Domain",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "type": "influxdb",
-          "uid": "${DS_INFLUXDB}"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "barWidthFactor": 0.6,
-              "drawStyle": "line",
-              "fillOpacity": 20,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "showValues": false,
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": 0
-                }
-              ]
-            },
-            "unit": "Mbits"
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "hop_count"
-              },
-              "properties": [
-                {
-                  "id": "unit",
-                  "value": "none"
-                },
-                {
-                  "id": "custom.axisPlacement",
-                  "value": "right"
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "orange",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 11,
-          "w": 12,
-          "x": 12,
-          "y": 76
-        },
-        "id": 8,
-        "options": {
-          "legend": {
-            "calcs": [
-              "mean",
-              "last"
-            ],
-            "displayMode": "table",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "hideZeros": false,
-            "mode": "multi",
-            "sort": "desc"
-          }
-        },
-        "pluginVersion": "12.3.2",
-        "targets": [
-          {
-            "datasource": {
-              "type": "influxdb",
-              "uid": "${DS_INFLUXDB}"
-            },
-            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\" or r[\"_field\"] == \"hop_count\")\n  |> group(columns: [\"_field\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"multi_field\")",
-            "refId": "A"
-          }
-        ],
-        "title": "Speed vs Network Hop Count (Dual Axis)",
-        "type": "timeseries"
       },
       {
         "datasource": {
@@ -1998,7 +2104,7 @@
           "h": 14,
           "w": 12,
           "x": 0,
-          "y": 87
+          "y": 98
         },
         "id": 7,
         "options": {
@@ -2006,7 +2112,7 @@
           "showHeader": true,
           "sortBy": []
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -2019,6 +2125,125 @@
         ],
         "title": "Speed Test Details (Last Results)",
         "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 20,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "showValues": false,
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                }
+              ]
+            },
+            "unit": "Mbits"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "hop_count"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "none"
+                },
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 12,
+          "y": 98
+        },
+        "id": 8,
+        "options": {
+          "legend": {
+            "calcs": [
+              "mean",
+              "last"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "pluginVersion": "12.3.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "${DS_INFLUXDB}"
+            },
+            "query": "from(bucket: \"speed-test-metrics\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed_test\")\n  |> filter(fn: (r) => r[\"_field\"] == \"speed_mbps\" or r[\"_field\"] == \"hop_count\")\n  |> group(columns: [\"_field\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"multi_field\")",
+            "refId": "A"
+          }
+        ],
+        "title": "Speed vs Network Hop Count (Dual Axis)",
+        "type": "timeseries"
       },
       {
         "datasource": {
@@ -2063,7 +2288,7 @@
           "h": 14,
           "w": 12,
           "x": 12,
-          "y": 87
+          "y": 109
         },
         "id": 12,
         "options": {
@@ -2137,7 +2362,7 @@
             "zoom": 2.2
           }
         },
-        "pluginVersion": "12.3.2",
+        "pluginVersion": "12.3.3",
         "targets": [
           {
             "datasource": {
@@ -2179,7 +2404,7 @@
       ]
     },
     "time": {
-      "from": "now-24h",
+      "from": "now-10d",
       "to": "now"
     },
     "timepicker": {
@@ -2198,7 +2423,7 @@
     "timezone": "browser",
     "title": "Internet Speed Test Monitoring",
     "uid": "internet-speed-test",
-    "version": 65
+    "version": 80
   },
   "status": {}
 }
