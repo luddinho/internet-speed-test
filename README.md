@@ -1,6 +1,6 @@
 # Internet Speed Test to InfluxDB
 
-🇩🇪 [Deutsch](README.de.md) | 🇬🇧 English
+Language: 🇬🇧 English | [🇩🇪 Deutsch](README.de.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
